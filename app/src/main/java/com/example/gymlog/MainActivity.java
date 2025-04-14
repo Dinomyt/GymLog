@@ -1,6 +1,7 @@
 package com.example.gymlog;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,9 +13,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.gymlog.databinding.ActivityMainBinding;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+    private static final String TAG = "DAC_GYMLOG";
+    String mExercise = "";
+    double mWeight = 0.0;
+    int mReps = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +31,30 @@ public class MainActivity extends AppCompatActivity {
         binding.LogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "It Worked!", Toast.LENGTH_SHORT).show();
+                updateDisplay();
             }
         });
+    }
+
+    private void updateDisplay(){
+        String currentInfo = binding.LogDisplayTextView.getText().toString();
+        Log.d(TAG, "Current Info: " + currentInfo);
+        getInformationDisplay();
+        String newDisplay = String.format(Locale.US, "Exercise:%s%nWeight:%.2f%nReps:%d%n", mExercise, mWeight, mReps);
+        binding.LogDisplayTextView.setText(newDisplay);
+    }
+    private void getInformationDisplay(){
+        mExercise = binding.ExerciseInputEditText.getText().toString();
+        try {
+            mWeight = Double.parseDouble(binding.WeightInputEditText.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(TAG, "Error reading value from weight edit text");
+        }
+        try {
+            mReps = Integer.parseInt(binding.RepInputEditText.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(TAG, "Error reading value from rep edit text");
+        }
+
     }
 }
