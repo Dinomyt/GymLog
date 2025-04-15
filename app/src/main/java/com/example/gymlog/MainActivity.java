@@ -1,6 +1,7 @@
 package com.example.gymlog;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.example.gymlog.database.GymLogRepository;
 import com.example.gymlog.database.entities.GymLog;
 import com.example.gymlog.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,27 +34,35 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         repository = GymLogRepository.getRepository(getApplication());
-
+        binding.LogDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
+        updateDisplay();
         binding.LogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getInformationDisplay();
                 insertGymLogRecord();
                 updateDisplay();
-
             }
         });
     }
     private void insertGymLogRecord(){
+        if(mExercise.isEmpty()){
+            return;
+        }
         GymLog log = new GymLog(mExercise, mWeight, mReps);
         repository.insertGymLog(log);
     }
     private void updateDisplay(){
-        String currentInfo = binding.LogDisplayTextView.getText().toString();
-        Log.d(TAG, "Current Info: " + currentInfo);
-        String newDisplay = String.format(Locale.US, "Exercise:%s%nWeight:%.2f%nReps:%d%n", mExercise, mWeight, mReps);
-        binding.LogDisplayTextView.setText(newDisplay);
-        Log.i(TAG, repository.getAllLogs().toString());
+        ArrayList<GymLog> allLogs = repository.getAllLogs();
+        if (allLogs.isEmpty()){
+            binding.LogDisplayTextView.setText(R.string.no_logs_available);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (GymLog log : allLogs) {
+            sb.append(log);
+        }
+
+        binding.LogDisplayTextView.setText(sb.toString());
     }
     private void getInformationDisplay(){
         mExercise = binding.ExerciseInputEditText.getText().toString();
