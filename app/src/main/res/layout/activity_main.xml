@@ -93,7 +93,7 @@
     <Button
         android:id="@+id/LogButton"
         android:layout_width="390dp"
-        android:layout_height="205dp"
+        android:layout_height="125dp"
         android:layout_marginTop="16dp"
         android:text="Log!"
         android:textSize="36dp"
