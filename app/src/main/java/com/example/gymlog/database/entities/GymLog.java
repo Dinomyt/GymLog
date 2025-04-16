@@ -1,5 +1,6 @@
 package com.example.gymlog.database.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,14 +12,18 @@ import java.util.Objects;
 @Entity(tableName = GymLogDatabase.GYM_LOG_TABLE)
 public class GymLog {
     @PrimaryKey(autoGenerate = true)
+
     private int id;
     private String exercise;
     private double weight;
     private int reps;
     private LocalDateTime date;
-
     private int userId;
 
+    /**
+     * Constructs a GymLog with exercise, weight, reps, and userId.
+     * Sets the date to the current time.
+     */
     public GymLog(String exercise, double weight, int reps, int userId) {
         this.exercise = exercise;
         this.weight = weight;
@@ -27,17 +32,23 @@ public class GymLog {
         date = LocalDateTime.now();
     }
 
+    /**
+     * Returns a string of this GymLog.
+     * Includes exercise, weight, reps, date.
+     */
+    @NonNull
     @Override
     public String toString() {
-        return
-                exercise + '\n' +
-                "weight:" + weight + '\n' +
-                "reps:" + reps + '\n' +
-                "date:" + date + '\n' +
-                "=-=-=-=-=-=-=-=\n"
-                ;
+        return exercise + '\n' +
+                ", weight=" + weight + '\n' +
+                ", reps=" + reps + '\n' +
+                ", date=" + date.toString() + '\n' +
+                "=-=-=-=-=-=-=-=\n";
     }
 
+    /**
+     * Compares this GymLog with another object.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

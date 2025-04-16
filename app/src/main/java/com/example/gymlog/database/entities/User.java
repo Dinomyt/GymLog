@@ -15,14 +15,19 @@ public class User {
     private String password;
     private boolean isAdmin;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    /**
+     * Constructor for creating a new user with a username and password.
+     */
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
+        this.isAdmin = false;
     }
 
+    /**
+     * Checks equality based on id, username, password, and admin status.
+     * Returns true if the given object matches this user.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,12 +41,6 @@ public class User {
         return Objects.hash(id, username, password, isAdmin);
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-        isAdmin = false;
-    }
-
     public int getId() {
         return id;
     }
@@ -50,6 +49,13 @@ public class User {
         this.id = id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getPassword() {
         return password;
